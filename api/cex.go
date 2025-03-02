@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -32,9 +33,17 @@ func GetRate(currency string) (*datatypes.Rate, error) {
 			return nil, err
 		}
 
-		// Convert the http response's body bytes to string and print them to the console
-		json := string(bodyBytes)
-		fmt.Println(json)
+		// Convert the http response's body bytes to string and print it to the console (original test code)
+		// json := string(bodyBytes)
+		// fmt.Println(json)
+
+		// JSON parsing (with Unmarshal)
+		var cryptoRate datatypes.Rate
+		err = json.Unmarshal(bodyBytes, &cryptoRate)
+
+		if err != nil {
+			return nil, err
+		}
 
 	} else {
 		// If the http get response was NOT OK
