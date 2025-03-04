@@ -10,7 +10,7 @@ import (
 	"myurl.com/go/cryptomasters/datatypes"
 )
 
-const apiUrl = "https://cex.io/api/ticker?%s/USD"
+const apiUrl = "https://cex.io/api/ticker/%s/USD"
 
 func GetRate(currency string) (*datatypes.Rate, error) {
 	upCurrency := strings.ToUpper(currency)
@@ -21,6 +21,8 @@ func GetRate(currency string) (*datatypes.Rate, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	var response CEXResponse
 
 	if res.StatusCode == http.StatusOK {
 		// If the http get response was OK
@@ -33,13 +35,8 @@ func GetRate(currency string) (*datatypes.Rate, error) {
 			return nil, err
 		}
 
-		// Convert the http response's body bytes to string and print it to the console (original test code)
-		// json := string(bodyBytes)
-		// fmt.Println(json)
-
 		// JSON parsing (with Unmarshal)
-		var cryptoRate datatypes.Rate
-		err = json.Unmarshal(bodyBytes, &cryptoRate)
+		err = json.Unmarshal(bodyBytes, &response)
 
 		if err != nil {
 			return nil, err
@@ -53,7 +50,7 @@ func GetRate(currency string) (*datatypes.Rate, error) {
 	}
 
 	// Return the Rate as a pointer to a struct
-	rate := datatypes.Rate{Currency: currency, Price: 20}
+	rate := datatypes.Rate{Currency: currency, Price: response.Bid}
 
 	return &rate, nil
 }
