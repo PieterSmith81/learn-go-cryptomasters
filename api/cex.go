@@ -15,7 +15,7 @@ const apiUrl = "https://cex.io/api/ticker/%s/USD"
 func GetRate(currency string) (*datatypes.Rate, error) {
 	// Ensure the input cryptocurrency ticker's length is always three characters or more
 	if len(currency) < 3 {
-		return nil, fmt.Errorf("A three character cryptocurrency ticker is required, but only %d characters were received.",
+		return nil, fmt.Errorf("3 character cryptocurrency ticker is required, but only %d characters were received",
 			len(currency))
 	}
 
